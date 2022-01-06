@@ -1,20 +1,25 @@
 <template>
- <div id="app">
+ <div id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ? 'warm' : ''">
    <main>
      <div class="search-box">
-       <input type="text" class="search-bar" placeholder="Search..." v-model="query"
-       @keypress="fetchWeather">
+       <input 
+       type="text" 
+       class="search-bar" 
+       placeholder="Search..." 
+       v-model="query"
+       @keypress="fetchWeather"
+       />
      </div>
-     <div class="weather-wrap" v-if="typeof weather.main != 'undefined'">
+     <div class="weather-wrap" v-if="typeof weather.main != 'undefined' ">
        <div class="location-box">
          <div class="location">{{ weather.name }}, {{ weather.sys.country }}</div>
-         <div class="date">Thursday 06 Jan 2022</div>
+         <div class="date">{{ dateBuilder() }}</div>
        </div>
        <div class="weather-box">
-         <div class="temp">{{ Math.round(weather.main.temp) }}9°c</div>
-         <div class="weather">{{weather.weather[0].main}}</div>
+         <div class="temp">{{ Math.round(weather.main.temp) }}°c</div>
+         <div class="weather">{{ weather.weather[0].main }}</div>
        </div>
-     </div>
+    </div>
    </main>
  </div>
 </template>
@@ -25,8 +30,8 @@ export default {
   data () {
     return {
       api_key: '5d4147f3303193a9b1a6bf4cc0482630',
-      url_base: 'https://api.openweathermap.ogg/data/2.5',
-      
+      url_base: 'https://api.openweathermap.org/data/2.5/',
+      query: '',
       weather: {}
     }
   },
@@ -42,11 +47,19 @@ export default {
     setResults (results) {
       this.weather = results;
     },
-    dateBuilder ( {
+    dateBuilder () {
       let d = new Date();
       let months = ["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Des"];
       let days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
-    })
+
+      let day = days[d.getDay()];
+      let date = d.getDate();
+      let month = months[d.getMonth()];
+      let year = d.getFullYear();
+
+      return `${day} ${date} ${month} ${year}`;
+
+    }
   }
 }
 </script>
@@ -69,6 +82,10 @@ body {
   transition: .4s;
 }
 
+#app.warm {
+  background-image: url('./assets/warm.jpg');
+}
+
 main {
   min-height: 100vh;
   padding: 25px;
@@ -83,7 +100,7 @@ main {
 
 .search-box .search-bar {
   display: block;
-  widows: 100%;
+  width: 100%;
   padding:  15px;
 
   color: blue;
@@ -95,9 +112,9 @@ main {
   background: none;
 
   box-shadow: 0px, 0px, 8px rgba(0, 0, 0, .25);
-  background-color: rgba(255, 255, 255, .5);
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 0px, 16px, 0px, 16px;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 .search-box .search-bar:focus {
