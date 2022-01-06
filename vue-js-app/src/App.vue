@@ -11,8 +11,8 @@
          <div class="date">Thursday 06 Jan 2022</div>
        </div>
        <div class="weather-box">
-         <div class="temp">9°c</div>
-         <div class="weather">Rain</div>
+         <div class="temp">{{ Math.round(weather.main.temp) }}9°c</div>
+         <div class="weather">{{weather.weather[0].main}}</div>
        </div>
      </div>
    </main>
@@ -25,8 +25,8 @@ export default {
   data () {
     return {
       api_key: '5d4147f3303193a9b1a6bf4cc0482630',
-      url_base: 'https://api.openweathermap.ogg/data/2.5'
-      query: '',
+      url_base: 'https://api.openweathermap.ogg/data/2.5',
+      
       weather: {}
     }
   },
@@ -38,7 +38,15 @@ export default {
           return res.json();
         }).then(this.setResults);
       }
-    }
+    },
+    setResults (results) {
+      this.weather = results;
+    },
+    dateBuilder ( {
+      let d = new Date();
+      let months = ["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Des"];
+      let days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+    })
   }
 }
 </script>
